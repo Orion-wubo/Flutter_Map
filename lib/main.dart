@@ -54,6 +54,45 @@ class MapHomePage extends StatefulWidget {
 }
 
 class _MapHomePageState extends State<MapHomePage> {
+  MethodChannel _channel =
+      new MethodChannel('com.fengmap.fengmap_demo/flmapview');
+
+  @override
+  void initState() {
+    super.initState();
+    // ignore: missing_return
+    _channel.setMethodCallHandler((MethodCall methodCall) {
+      setState(() {
+        log(methodCall.method.toString());
+        switch (methodCall.method) {
+          case 'mapInitSuccess':
+            {
+              log("method mapInitSuccess");
+            }
+            break;
+          case 'themeInitSuccess':
+            {
+              log("method mapInitSuccess");
+            }
+            break;
+          case 'mapInitFailure':
+            {
+              var mapInitErrorInfo = methodCall.arguments['mapInitErrorInfo'];
+              log(mapInitErrorInfo);
+            }
+            break;
+          case 'themeInitFailure':
+            {
+              var themeInitErrorInfo =
+                  methodCall.arguments['themeInitErrorInfo'];
+              log(themeInitErrorInfo);
+            }
+            break;
+        }
+      });
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -67,11 +106,11 @@ class _MapHomePageState extends State<MapHomePage> {
             child: AndroidView(
               viewType: "com.fengmap.fengmap_demo/flmapview",
               creationParams: {
-                "mapId": "10347",
+                "mapId": "239393",
                 "autoUpdate": true,
               },
               creationParamsCodec: const StandardMessageCodec(),
-              onPlatformViewCreated: onMyViewCreated, //初始化
+              // onPlatformViewCreated: onMyViewCreated, //初始化
             ),
           ),
           RaisedButton(
@@ -88,10 +127,8 @@ class _MapHomePageState extends State<MapHomePage> {
     );
   }
 
-  MethodChannel _channel =
-      new MethodChannel('com.fengmap.fengmap_demo/flmapview');
-
   void onMyViewCreated(int id) {
+    log("message");
     setFloorId(6);
   }
 
